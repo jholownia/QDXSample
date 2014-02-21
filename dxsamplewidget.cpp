@@ -17,7 +17,8 @@ DXSampleWidget::DXSampleWidget(QWidget *parent) :
     m_timer(nullptr),
     m_frameTime(0),
     m_elapsedTime(0),
-    m_frames(0)
+    m_frames(0),
+    m_animating(false)
 {
 
 }
@@ -87,14 +88,27 @@ void DXSampleWidget::update()
     // Get time since last frame
     m_frameTime = m_timer->restart();
 
+    // Use this when disabling vsync
+    // qDebug() << m_timer->nsecsElapsed();
+
     // Calculate frames per second
     ++m_frames;
     m_elapsedTime += m_frameTime;
+
     if (m_elapsedTime >= 1000)
-    {
+    {        
         emit fps(m_frames);
         m_frames = 0;
-        m_elapsedTime = 0;
+        m_elapsedTime = 0;        
+    }
+
+    // Rotate the model?
+    if (m_animating)
+    {
+        static float rotation = 0.0f;
+        rotation += 0.001f * m_frameTime;
+        if (rotation >= 2 * (float)D3DX_PI) rotation -= 2 * (float)D3DX_PI;
+        m_model->setRotation(m_model->getRotation().x, rotation, m_model->getRotation().z);
     }
 
     // Render the scene
@@ -117,6 +131,84 @@ QSize DXSampleWidget::minimumSizeHint() const
 QSize DXSampleWidget::sizeHint() const
 {
     return QSize(800, 600);
+}
+
+void DXSampleWidget::toggleAnimation(bool animating)
+{
+    m_animating = animating;
+}
+
+void DXSampleWidget::rotateX(float angle)
+{
+    D3DXVECTOR3 rotation = m_model->getRotation();
+    m_model->setRotation(angle * 0.0174532925f, rotation.y, rotation.z);
+}
+
+void DXSampleWidget::rotateY(float angle)
+{
+    D3DXVECTOR3 rotation = m_model->getRotation();
+    m_model->setRotation(rotation.x, angle * D3DX_PI / 180.0f, rotation.z);
+}
+
+void DXSampleWidget::rotateZ(float angle)
+{
+    D3DXVECTOR3 rotation = m_model->getRotation();
+    m_model->setRotation(rotation.x, rotation.y, angle * 0.0174532925f);
+}
+
+void DXSampleWidget::setAmbientR(int r)
+{
+    m_light->setAmbientColor(r / 255.0f, m_light->getAmbientColor().y, m_light->getAmbientColor().z, m_light->getAmbientColor().w);
+}
+
+void DXSampleWidget::setAmbientG(int g)
+{
+    m_light->setAmbientColor(m_light->getAmbientColor().x, g / 255.0f, m_light->getAmbientColor().z, m_light->getAmbientColor().w);
+}
+
+void DXSampleWidget::setAmbientB(int b)
+{
+    m_light->setAmbientColor(m_light->getAmbientColor().x, m_light->getAmbientColor().y, b / 255.0f, m_light->getAmbientColor().w);
+}
+
+void DXSampleWidget::setDiffuseR(int r)
+{
+    m_light->setDiffuseColor(r / 255.0f, m_light->getDiffuseColor().y, m_light->getDiffuseColor().z, m_light->getDiffuseColor().w);
+}
+
+void DXSampleWidget::setDiffuseG(int g)
+{
+    m_light->setDiffuseColor(m_light->getDiffuseColor().x, g / 255.0f, m_light->getDiffuseColor().z, m_light->getDiffuseColor().w);
+}
+
+void DXSampleWidget::setDiffuseB(int b)
+{
+    m_light->setDiffuseColor(m_light->getDiffuseColor().x, m_light->getDiffuseColor().y, b / 255.0f, m_light->getDiffuseColor().w);
+}
+
+void DXSampleWidget::setSpecularR(int r)
+{
+    m_light->setSpecularColor(r / 255.0f, m_light->getSpecularColor().y, m_light->getSpecularColor().z, m_light->getSpecularColor().w);
+}
+
+void DXSampleWidget::setSpecularG(int g)
+{
+    m_light->setSpecularColor(m_light->getSpecularColor().x, g / 255.0f, m_light->getSpecularColor().z, m_light->getSpecularColor().w);
+}
+
+void DXSampleWidget::setSpecularB(int b)
+{
+    m_light->setSpecularColor(m_light->getSpecularColor().x, m_light->getSpecularColor().y, b / 255.0f, m_light->getSpecularColor().w);
+}
+
+void DXSampleWidget::setSpecularPower(int power)
+{
+    m_light->setSpecularPower((float)power);
+}
+
+void DXSampleWidget::setSpecularIntensity(int intensity)
+{
+    m_light->setSpecularIntensity(intensity / 100.0f);
 }
 
 void DXSampleWidget::wheelEvent(QWheelEvent *event)
@@ -159,7 +251,7 @@ void DXSampleWidget::mousePressEvent(QMouseEvent *event)
 }
 
 void DXSampleWidget::render()
-{
+{  
     // Begin scene
     m_d3d->beginScene(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -173,30 +265,16 @@ void DXSampleWidget::render()
     m_d3d->getProjectionMatrix(projectionMatrix);
     m_d3d->getOrthoMatrix(orthoMatrix);
 
-    // Move the model?
-    static float rotation = 0.0f;
-
+    // Rotate the model
     D3DXMATRIX rotationMatrix;
-    D3DXMatrixRotationY(&rotationMatrix, -rotation);
-    rotation += 0.001f * m_frameTime;
-    if (rotation >= 360.0f) rotation -= 360.0f;
-
-    //D3DXMatrixRotationY(&rotationMatrix, model_->getRotation().y);
-    //D3DXMATRIX translationMatrix;
-    //D3DXMatrixTranslation(&translationMatrix, tiger_->getPosition().x, tiger_->getPosition().y, tiger_->getPosition().z);
-
-    // Render the model
+    D3DXVECTOR3 rotation = m_model->getRotation();
+    D3DXMatrixRotationYawPitchRoll(&rotationMatrix, rotation.y, rotation.x, rotation.z);
 
     D3DXMATRIX worldMatrix;
     m_d3d->getWorldMatrix(worldMatrix);
+    D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &rotationMatrix);;
 
-    // Scale?
-    /*D3DXMATRIX scaleMatrix;
-    D3DXMatrixScaling(&scaleMatrix, 0.2f, 0.2f, 0.2f);
-    D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &scaleMatrix);*/
-
-    D3DXMatrixMultiply(&worldMatrix, &worldMatrix, &rotationMatrix);
-
+    // Render the model
     m_model->render(m_d3d->getDeviceContext());
     m_shader->render(m_d3d->getDeviceContext(), m_model->getIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_model->getTextureArray(), m_light->getDirection(), m_light->getAmbientColor(), m_light->getDiffuseColor(), m_camera->getPosition(), m_light->getSpecularColor(), m_light->getSpecularPower(), m_light->getSpecularIntensity());
 

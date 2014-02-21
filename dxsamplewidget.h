@@ -24,6 +24,23 @@ public:
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
 
+    // GUI handlers
+    void toggleAnimation(bool animating);
+    void rotateX(float angle);
+    void rotateY(float angle);
+    void rotateZ(float angle);
+    void setAmbientR(int r);
+    void setAmbientG(int g);
+    void setAmbientB(int b);
+    void setDiffuseR(int r);
+    void setDiffuseG(int g);
+    void setDiffuseB(int b);
+    void setSpecularR(int r);
+    void setSpecularG(int g);
+    void setSpecularB(int b);
+    void setSpecularPower(int power);
+    void setSpecularIntensity(int intensity);
+
 signals:
     void fps(int fps);
 
@@ -38,6 +55,7 @@ private:
     qint64 m_frameTime;
     qint64 m_elapsedTime;
     int m_frames;
+    bool m_animating;
 
     void wheelEvent(QWheelEvent *event);
     void mousePressEvent(QMouseEvent *event);
