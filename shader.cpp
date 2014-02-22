@@ -10,6 +10,7 @@
 */
 
 #include "shader.h"
+
 #include <D3Dcompiler.h>
 
 /*

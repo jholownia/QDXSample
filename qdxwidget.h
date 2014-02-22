@@ -1,9 +1,21 @@
+/*
+================================
+ dxwidget.h
+
+ Created on: 16 Feb 2014
+ Author: Jan Holownia
+
+ Copyright (c) Jan Holownia <jan.holownia@gmail.com> 2012.
+================================
+*/
+
 #ifndef QDXWIDGET_H
 #define QDXWIDGET_H
 
-#include <QWidget>
 #include "d3dbase.h"
 #include "config.h"
+
+#include <QWidget>
 
 class QDXWidget : public QWidget
 {

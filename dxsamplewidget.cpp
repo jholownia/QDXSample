@@ -1,3 +1,14 @@
+/*
+================================
+ dxsamplewidget.cpp
+
+ Created on: 18 Feb 2014
+ Author: Jan Holownia
+
+ Copyright (c) Jan Holownia <jan.holownia@gmail.com> 2014.
+================================
+*/
+
 #include "dxsamplewidget.h"
 #include "camera.h"
 #include "model.h"

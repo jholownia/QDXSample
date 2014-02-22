@@ -10,12 +10,10 @@
 */
 
 #pragma once
-
 #pragma warning( disable : 4005 )
 
 #include <D3D11.h>
 #include <D3DX11.h>
-
 #include <string>
 #include <vector>
 

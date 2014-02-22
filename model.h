@@ -10,13 +10,11 @@
 */
 
 #pragma once
-
 #pragma warning( disable : 4005 )
 
 #include "mesh.h"
 #include "texturearray.h"
 #include "Moveable.h"
-
 
 #include <d3d11.h>
 #include <D3DX10math.h>
@@ -32,7 +30,7 @@ using Microsoft::WRL::ComPtr;
  
  Model
 
- A generic 3D object which can be loaded from .OBJ files.
+ A generic 3D object. Stores geometry information.
  
 ================================
 */

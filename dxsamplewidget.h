@@ -1,3 +1,14 @@
+/*
+================================
+ dxsamplewidget.h
+
+ Created on: 18 Feb 2014
+ Author: Jan Holownia
+
+ Copyright (c) Jan Holownia <jan.holownia@gmail.com> 2014.
+================================
+*/
+
 #ifndef DXSAMPLEWIDGET_H
 #define DXSAMPLEWIDGET_H
 

@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     model.cpp \
     moveable.cpp \
     objloader.cpp \
-    position.cpp \
     shader.cpp \
     texturearray.cpp \
     d3dbase.cpp \

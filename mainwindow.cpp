@@ -1,3 +1,14 @@
+/*
+================================
+ mainwindow.h
+
+ Created on: 16 Feb 2014
+ Author: Jan Holownia
+
+ Copyright (c) Jan Holownia <jan.holownia@gmail.com> 2012.
+================================
+*/
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 

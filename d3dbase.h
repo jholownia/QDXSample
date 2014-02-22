@@ -1,6 +1,6 @@
 /*
 ================================
- d3dmanager.h
+ D3DBase.h
 
  Created on: 09 Dec 2012
  Author: Jan Holownia
@@ -31,7 +31,7 @@ using Microsoft::WRL::ComPtr;
 /*
 ================================
  
- D3DManager
+ D3DBase
 
  A wrapper class for Direct3D initialization.
  Creates the device, device context, sets up swap chain and the back buffer.

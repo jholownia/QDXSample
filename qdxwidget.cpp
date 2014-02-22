@@ -1,8 +1,18 @@
+/*
+================================
+ dxwidget.cpp
+
+ Created on: 16 Feb 2014
+ Author: Jan Holownia
+
+ Copyright (c) Jan Holownia <jan.holownia@gmail.com> 2012.
+================================
+*/
+
 #include "qdxwidget.h"
 
 #include <QApplication>
 #include <QResizeEvent>
-
 #include <QDebug>
 
 QDXWidget::QDXWidget(QWidget *parent) :
