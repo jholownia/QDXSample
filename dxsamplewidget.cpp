@@ -219,34 +219,25 @@ void DXSampleWidget::wheelEvent(QWheelEvent *event)
 }
 
 void DXSampleWidget::mousePressEvent(QMouseEvent *event)
-{
-    D3DXVECTOR3 lightDirection;
-    lightDirection = m_light->getDirection();
-    lightDirection.x = (2.0f * (float)event->x()) / (float)width() - 1.0f;
-    lightDirection.y = ((2.0f * (float)event->y()) / (float)height() - 1.0f) * -1.0f;
-
-    float x = lightDirection.x;
-    float y = lightDirection.y;
-
+{    
     D3DXMATRIX projectionMatrix;
     m_d3d->getProjectionMatrix(projectionMatrix);
-    x = x / projectionMatrix._11;
-    y = y / projectionMatrix._22;
+
+    float x = ((2.0f * (float)event->x()) / (float)width() - 1.0f) / projectionMatrix._11;
+    float y = ((-2.0f * (float)event->y()) / (float)height() + 1.0f) / projectionMatrix._22;
+
+    D3DXVECTOR3 lightDirection (x, y, 1.0f);
 
     D3DXMATRIX viewMatrix, inverseViewMatrix;
     m_camera->getViewMatrix(viewMatrix);
     D3DXMatrixInverse(&inverseViewMatrix, NULL, &viewMatrix);
 
-    lightDirection.x = (x * inverseViewMatrix._11) + (y * inverseViewMatrix._21) + inverseViewMatrix._31;
-    lightDirection.y = (x * inverseViewMatrix._12) + (y * inverseViewMatrix._22) + inverseViewMatrix._32;
-    lightDirection.z = (x * inverseViewMatrix._13) + (y * inverseViewMatrix._23) + inverseViewMatrix._33;
+    D3DXVec3TransformNormal(&lightDirection, &lightDirection, &inverseViewMatrix);
+    lightDirection.x *= m_camera->getPosition().z;
+    lightDirection.y *= m_camera->getPosition().z;
 
-    D3DXMATRIX worldMatrix, inverseWorldMatrix;
-    m_d3d->getWorldMatrix(worldMatrix);
-    D3DXMatrixInverse(&inverseWorldMatrix, NULL, &worldMatrix);
-    D3DXVec3TransformCoord(&lightDirection, &lightDirection, &inverseWorldMatrix);
+    D3DXVec3Normalize(&lightDirection, &lightDirection);
 
-    qDebug() << lightDirection.x << ", " << lightDirection.y;
     m_light->setDirection(lightDirection.x, lightDirection.y, lightDirection.z);
 }
 

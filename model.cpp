@@ -195,7 +195,7 @@ void Model::renderBuffers( ID3D11DeviceContext* deviceContext )
 	unsigned int stride;
 	unsigned int offset;
 
-	stride = sizeof(Vertex);
+    stride = sizeof(Vertex);
 	offset = 0;
 
 	deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
@@ -214,7 +214,6 @@ bool Model::loadTextures( ID3D11Device* device, const std::string& filename1, co
 
 	return m_textureArray->init(device, filename1, filename2, filename3);
 }
-
 
 
 void Model::CalculateTBNVectors()
@@ -314,9 +313,9 @@ void Model::CalculateTBNVectors()
 		normal3.y = m_mesh[index - 1].ny;
 		normal3.z = m_mesh[index - 1].nz;
 
-		D3DXVECTOR3 axis;    // rotation axis	
-		D3DXVECTOR4 temp;    // temporary vector for rotation result
-		D3DXMATRIX rotation; // rotation matrix
+        D3DXVECTOR3 axis;
+        D3DXVECTOR4 temp;
+        D3DXMATRIX rotation;
 		float cosAngle, angle;
 
 		// Vertex 1
