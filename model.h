@@ -23,6 +23,7 @@
 #include <wrl/client.h>
 #include <memory>
 
+// Check Windows version and use ATL if < 8 (e.g. NETFX_CORE)
 using Microsoft::WRL::ComPtr;
 
 /*
