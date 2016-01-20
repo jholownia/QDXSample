@@ -274,7 +274,7 @@ bool Shader::initShader( ID3D11Device* device, HWND hwnd, WCHAR* vsFilename, WCH
 void Shader::outputShaderErrorMessage( ID3D10Blob* errorMessage, HWND hwnd, WCHAR* filename )
 {
 	char* compileErrors;
-	unsigned long bufferSize;
+	size_t bufferSize;
 	std::ofstream ofs;
 
 	compileErrors = (char *)(errorMessage->GetBufferPointer());

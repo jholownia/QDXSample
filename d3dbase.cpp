@@ -134,7 +134,7 @@ bool D3DBase::init( int screenWidth, int screenHeight, const bool vsync, HWND hw
 
     // Get GPU name
     char gpuDescription[128];
-    unsigned int stringLength;
+    size_t stringLength;
     int error = wcstombs_s(&stringLength, gpuDescription, 128, adapterDesc.Description, 128);
     if (error != 0)
     {
